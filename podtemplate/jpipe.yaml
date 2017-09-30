@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jpipe
+  namespace: cicd
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: jpipe
+    spec:
+      containers:
+      - name: jpipe
+        image: hub.easystack.io/captain/jpipe:0.3
+        args:
+        - --jenkins-username=admin
+        - --jenkins-password=password
+        - --jenkins-address=http://jenkins-svc.cicd.svc.cluster.local:80
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9090
+            protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jpipe-svc
+  namespace: cicd
+spec:
+  type: NodePort
+  ports:
+  - port: 90
+    targetPort: 9090
+    nodePort: 32000
+    name: jpipe
+  selector:
+    k8s-app: jpipe
