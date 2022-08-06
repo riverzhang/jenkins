@@ -36,3 +36,44 @@ spec:
    - name: "scale-up"
      schedule: "01 */1 * * * *"
      targetSize: 3
+     
+     apiVersion: workload.example.io/v1alpha1
+kind: Workload
+metadata:
+  name: nginx
+  namespace: apps
+  labels:
+    app: nginx
+spec:
+  replicas: 5
+  paused: false
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+------------------
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx
+  namespace: apps
+spec:
+  scaleTargetRef:
+    apiVersion: workload.example.io/v1alpha1
+    kind: Workload
+    name: nginx
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+     
+     
