@@ -37,7 +37,7 @@ spec:
      schedule: "01 */1 * * * *"
      targetSize: 3
      
-     apiVersion: workload.example.io/v1alpha1
+apiVersion: workload.example.io/v1alpha1
 kind: Workload
 metadata:
   name: nginx
