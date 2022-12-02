@@ -20,7 +20,7 @@ spec:
         ports:
         - containerPort: 80
 ---
-apiVersion: autoscaling.vivo.com/v1
+apiVersion: autoscaling.xxx.com/v1
 kind: CronHorizontalPodAutoscaler
 metadata:
   name: cronhpa-sample
